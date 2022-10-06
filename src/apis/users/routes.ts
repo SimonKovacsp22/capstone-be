@@ -1,5 +1,5 @@
 import express from "express"
-import { registerUser, loginUser, getUsers, getMe, updateUser } from './index'
+import { registerUser, loginUser, getUsers, getMe, updateUser, updatePassword } from './index'
 import { IUserRequest, JWTAuthMiddleware } from "../../lib/JWTMiddleware"
 import passport from "passport"
 
@@ -25,5 +25,9 @@ userRouter.get("/googleRedirect",passport.authenticate("google", { session: fals
 })
 
 userRouter.put("/me", JWTAuthMiddleware, updateUser)
+
+userRouter.patch("/password-reset", updatePassword)
+
+
 
 export default userRouter

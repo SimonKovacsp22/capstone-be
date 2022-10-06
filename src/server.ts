@@ -12,6 +12,7 @@ import  userRouter  from '../src/apis/users/routes'
 import googleStrategy from "./lib/googleLogin";
 import categoryRouter from "./apis/categories/routes";
 import productRouter from "./apis/products/routes";
+import pinRouter from "./apis/pin/routes";
 
 const port = process.env.PORT
 
@@ -30,6 +31,7 @@ passport.use("google", googleStrategy)
 server.use("/users", userRouter)
 server.use("/categories", categoryRouter)
 server.use("/products", productRouter)
+server.use("/pin", pinRouter)
 
 
 server.use(badRequestHandler)

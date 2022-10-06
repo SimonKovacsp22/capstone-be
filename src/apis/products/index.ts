@@ -1,6 +1,7 @@
 import { RequestHandler } from "express"
 import createHttpError from "http-errors"
 import ProductModel from "./model"
+import mongoose from "mongoose"
 
 export const createProduct: RequestHandler = async (req,res,next) => {
     try {
@@ -31,6 +32,13 @@ export const getProductById: RequestHandler = async (req,res,next) => {
 }
 export const getProductsByCategory: RequestHandler = async (req,res,next) => {
     try {
+        
+       
+        const products = await ProductModel.find()
+
+       const productsInCategory =  products.filter( product => product.categories.some((category)=> category.toString() === req.params.categoryId))
+
+        res.send(productsInCategory)
         
     } catch (error) {
         next(error)

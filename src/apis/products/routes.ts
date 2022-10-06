@@ -9,7 +9,7 @@ productRouter.post("/", createProduct)
 
 productRouter.get("/id", getProductById)
 
-productRouter.get("/query", getProductsByCategory)
+productRouter.get("/category/:categoryId", getProductsByCategory)
 
 productRouter.put("/:id", updateProduct)
 

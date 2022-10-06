@@ -11,6 +11,7 @@ const userSchema = new Schema({
     password:{ type:String},
     googleID:{type:String},
     role:{type:String, enum:["admin","employee","customer"],default:"customer"},
+    pinRequest:[{type:mongoose.Types.ObjectId, ref:"Pin"}]
 },
 {timestamps: true},
 )
