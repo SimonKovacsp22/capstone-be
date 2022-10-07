@@ -5,6 +5,10 @@ export type TokenPayload = {
     role: "admin" | "employee" | "customer"
 }
 
+export type RefreshTokenPayload ={
+    _id: mongoose.ObjectId
+}
+
 export interface User {
     name: string,
     surname: string,
@@ -12,7 +16,13 @@ export interface User {
     password: string,
     googleID: string,
     accessToken: string,
-    role: "admin" | "employee" | "customer"
+    role: "admin" | "employee" | "customer",
+    refreshToken: string,
+}
+
+export interface Tokens {
+    accessToken: string,
+    refreshToken: string
 }
 
 export interface UserDocument extends mongoose.Document,User {}

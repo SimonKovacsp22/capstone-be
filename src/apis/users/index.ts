@@ -1,7 +1,7 @@
 import express from "express"
 import mongoose from "mongoose"
 import createHttpError from "http-errors"
-import { createAccessToken} from "../../lib/tokens"
+import { createAccessToken, createNewTokens, createTokens} from "../../lib/tokens"
 import { RequestHandler } from "express"
 import { IUserRequest } from "../../lib/JWTMiddleware"
 import UserModel from "./model"
@@ -38,9 +38,9 @@ export const loginUser: RequestHandler = async (req,res,next) => {
         next(createHttpError(401, "Incorrent combination of credentials"))
     } else {
 
-        const token = await createAccessToken({_id: user._id, role: user.role})
+       const tokens = await createTokens(user)
 
-        res.send({accessToken: token})
+        res.send({accessToken: tokens?.accessToken, refreshToken: tokens?.refreshToken})
     }
     
    } catch (error) {
@@ -152,5 +152,22 @@ export const getUserByEmail = async (email:String) => {
         
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const refreshTokens:RequestHandler = async (req,res,next) => {
+    try {
+
+        const refreshToken = req.headers.authorization?.replace("Bearer ", "");
+
+        if(refreshToken){ 
+            
+            const tokens = await createNewTokens(refreshToken)
+
+            res.send({accessToken: tokens?.accessToken, refreshToken: tokens?.refreshToken})
+        }
+
+    } catch (error) {
+        next(error)
     }
 }

@@ -6,14 +6,15 @@ const {model,Schema} = mongoose
 
 const userSchema = new Schema({
     name:{ type:String },
-    surname:{ type:String,},
-    email:{ type:String, required:true},
-    password:{ type:String},
-    googleID:{type:String},
-    role:{type:String, enum:["admin","employee","customer"],default:"customer"},
-    pinRequest:[{type:mongoose.Types.ObjectId, ref:"Pin"}]
+    surname:{ type:String },
+    email:{ type:String, required:true },
+    password:{ type:String },
+    googleID:{ type:String },
+    role:{ type:String, enum:["admin","employee","customer"],default:"customer" },
+    pinRequest:[{type:mongoose.Types.ObjectId, ref:"Pin" }],
+    refreshToken:{ type:String }
 },
-{timestamps: true},
+{ timestamps: true },
 )
 
 
@@ -41,6 +42,9 @@ userSchema.methods.toJSON = function () {
 
     delete user.password
     delete user.__v
+    delete user.refreshToken
+    delete user.pinRequest
+    delete user.googleID
     return user
 }
 
