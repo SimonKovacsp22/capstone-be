@@ -2,7 +2,7 @@ import {model,Schema,Types} from 'mongoose'
 
 const categorySchema = new Schema({
     name:{type:String, required:true},
-    subCategories:[{type:String}]
+    subCategories:[{type:String ,ref:"Category"}]
 
 })
 
