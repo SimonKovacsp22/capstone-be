@@ -1,5 +1,5 @@
 import express from 'express'
-import {createProduct, getProductById, getProductsByCategory, updateProduct, deleteProduct, addImage} from './index'
+import {createProduct, getProductById, getProductsByCategory, updateProduct, deleteProduct, addImage, searchProduct} from './index'
 import { cloudinaryUploader } from '../../lib/fileUpload'
 
 const productRouter = express.Router()
@@ -16,5 +16,7 @@ productRouter.put("/:id", updateProduct)
 productRouter.delete("/:id", deleteProduct)
 
 productRouter.post("/:id/image" , cloudinaryUploader, addImage)
+
+productRouter.get("/search", searchProduct)
 
 export default productRouter

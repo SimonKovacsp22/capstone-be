@@ -30,9 +30,24 @@ export const createCategory: RequestHandler = async (req,res,next) => {
     } catch (error) {
         next(error)
     }
-    
-
 }
+
+export const getCategoryById: RequestHandler = async (req,res,next) => {
+    try {
+        const category = await CategoryModel.findById(req.params.id)
+
+        if(!category) {
+            next(createHttpError(404,`Category with id:${req.params.id} does not exist`))
+        }
+
+        res.send(category)
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
 export const updateCategory: RequestHandler = async  (req,res,next) => {
        try {
             const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, req.body, {runValidators:true, new:true})
@@ -52,18 +67,15 @@ export const addSubToCategory: RequestHandler = async  (req,res,next) => {
     try {
          const category = await CategoryModel.findById(req.params.id)
 
-         const subCategories = req.body.categories
+         const subs = req.body.subCategories
 
          if(!category) next(createHttpError(404,`category with id:${req.params.id} not found`))
 
-         subCategories.forEach( (subId:any)=> {
-            
-            category?.subCategories.push(subId) 
-        });
+        const newSubCategories = category?.subCategories.concat(subs)
 
-         category?.save()
+        const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id,{subCategories: newSubCategories},{new:true})
 
-         res.send(category)
+         res.send(updatedCategory)
               
     } catch (error) {
          next(error)
@@ -80,11 +92,13 @@ export const removeSubCategory: RequestHandler = async  (req,res,next) => {
 
          if(!category) next(createHttpError(404,`category with id:${req.params.id} not found`))
 
-         category?.subCategories.filter( (subId) => subId !== subToRemove )
+         const newSubCategories = category?.subCategories.filter( (subId) => subId !== subToRemove )
 
-         category?.save()
+         console.log(newSubCategories)
 
-         res.send(category)
+         const newCategory =  await CategoryModel.findByIdAndUpdate(req.params.id,{subCategories: newSubCategories},{new:true})
+
+         res.send(newCategory)
               
     } catch (error) {
          next(error)

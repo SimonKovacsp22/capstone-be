@@ -3,17 +3,19 @@ import {getCategories,
     createCategory,
     updateCategory,
     addSubToCategory,
-    removeSubCategory} from './index'
+    removeSubCategory, getCategoryById} from './index'
 
 const categoryRouter = express.Router()
 
 categoryRouter.get("/", getCategories)
 
+categoryRouter.get("/:id", getCategoryById)
+
 categoryRouter.post("/", createCategory)
 
 categoryRouter.put("/:id", updateCategory)
 
-categoryRouter.put("/add/:id", addSubToCategory)
+categoryRouter.post("/add/:id", addSubToCategory)
 
 categoryRouter.delete("/remove/:id", removeSubCategory)
 
