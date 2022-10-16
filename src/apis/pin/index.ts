@@ -75,7 +75,7 @@ export const findPinInDB = async (email:String,pin:String) => {
 
 export const checkIfPinExpired = ( createdAt: Date) => {
    
-    const expDate= createdAt.setDate( createdAt.getDate() + 1)
+    const expDate = createdAt.setDate( createdAt.getDate() + 1)
 
     const today = Date.now()
 

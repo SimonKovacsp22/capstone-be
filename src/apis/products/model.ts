@@ -9,7 +9,7 @@ const productSchema = new Schema({
     madeBy:{type:String},
     image_path: {type:String},
     code:{type:String},
-    availability:{ type:String, enum:["storage", "order"], default:"storage"},
+    availability:{ type:String, enum:["storage", "order","unavailable"], default:"storage"},
     auxiliaries:{ type:Types.ObjectId, ref:"Product"}
 
 },

@@ -15,7 +15,7 @@ export const addItemToCart: RequestHandler = async (req, res, next) => {
 
    
     const purchasedProduct = await ProductModel.findById(productId)
-    if (!purchasedProduct) return next(createHttpError(404, `Book with id ${productId} not found!`))
+    if (!purchasedProduct) return next(createHttpError(404, `Product with id ${productId} not found!`))
 
     
     const isProductThere = await CartModel.findOne({ owner: req.params.userId, status: "Active", "products.productId": productId })
@@ -53,9 +53,16 @@ export const getCartByUser: RequestHandler = async (req, res, next) => {
         },
         {},
         { new: true, runValidators: true, upsert: true }
-      );
+      ).populate({path:"products.productId"})
 
-      res.send(cart);
+
+    let quantity:number = 0;
+    
+    cart.products.forEach( product => {
+      quantity += product.quantity
+    })
+
+      res.send({cart,quantity});
     } else {
       next(
         createHttpError(404, `User with id:${req.params.userId} not found!`)
@@ -65,3 +72,58 @@ export const getCartByUser: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const removeItemFromCart: RequestHandler = async (req,res,next) => {
+  try {
+    const { productId } = req.body
+
+    
+    const user = await UserModel.findById(req.params.userId)
+    if (!user) return next(createHttpError(404, `User with id ${req.params.userId} not found!`))
+
+   
+    const purchasedProduct = await ProductModel.findById(productId)
+    if (!purchasedProduct) return next(createHttpError(404, `Product with id ${productId} not found!`))
+
+    
+    const isProductThere = await CartModel.findOne({ owner: req.params.userId, status: "Active", "products.productId": productId })
+
+    
+
+    
+
+         if(isProductThere) { 
+          
+          const currProduct = isProductThere.products.find( product => product.productId?.toString() === productId)
+
+         
+
+          
+            if(currProduct) {
+                if(currProduct.quantity > 1){
+                            const modifiedCart = await CartModel.findOneAndUpdate(
+                                { owner: req.params.userId, status: "Active", "products.productId": productId },
+                                { $inc: { "products.$.quantity": -1} },
+                                { new: true, runValidators: true } )
+
+                                res.send(modifiedCart)
+                          }else {
+                            const modifiedCart = await CartModel.findOneAndUpdate(
+                              { owner: req.params.userId, status: "Active", "products.productId": productId },
+                              { $pull:{products: {productId: productId}}},
+                              { new: true, runValidators: true } )
+                              
+                              res.send(modifiedCart)
+                          }
+                      
+                             }
+                              }
+
+                    else{
+                      next(createHttpError(404, `Product with id:${productId} not found!`))
+                    }
+} catch (error) {
+    
+  }
+}
