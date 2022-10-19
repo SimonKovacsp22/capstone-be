@@ -47,12 +47,14 @@ export const passwordReset: RequestHandler = async (req,res,next) => {
         if(user && user.email){ 
             
         const  pin = await createPinObj(user.email)
-            
+
         await sendEmail(user.email,pin.pin)
-
-        }
-
+        
         res.send({message:"Email with verification pin was sent to your mailbox!"})
+
+        } else next(createHttpError(404))
+
+        
         
         } catch (error) {
         console.log(error)

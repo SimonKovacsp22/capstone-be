@@ -14,6 +14,9 @@ import categoryRouter from "./apis/categories/routes";
 import productRouter from "./apis/products/routes";
 import pinRouter from "./apis/pin/routes";
 import cartRouter from "./apis/cart/routes"
+import stripeRouter from "./apis/stripe/routes"
+
+
 
 const port = process.env.PORT
 
@@ -34,6 +37,7 @@ server.use("/categories", categoryRouter)
 server.use("/products", productRouter)
 server.use("/pin", pinRouter)
 server.use("/cart", cartRouter)
+server.use("/checkout", stripeRouter)
 
 
 server.use(badRequestHandler)

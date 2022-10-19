@@ -1,6 +1,6 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 import UserModel from '../apis/users/model'
-import { createAccessToken } from './tokens'
+import { createAccessToken, createTokens } from './tokens'
 
 const googleStrategy = new GoogleStrategy({
     clientID:process.env.GOOGLE_ID,
@@ -14,9 +14,12 @@ const googleStrategy = new GoogleStrategy({
     const user =await UserModel.findOne({email: profile._json.email})
 
     if(user) {
-          const accessToken = await createAccessToken({_id: user._id, role: user.role})
+        const tokens = await createTokens(user);
 
-          passportNext(null,{ accessToken })
+          passportNext(null,{
+            accessToken: tokens?.accessToken,
+            refreshToken: tokens?.refreshToken,
+          })
     } else {
 
         const { given_name, family_name, picture, email} = profile._json
@@ -24,15 +27,19 @@ const googleStrategy = new GoogleStrategy({
             name: given_name,
             surname: family_name,
             email,
-            googleID: profile.id
+            googleID: profile.id,
+            image_path: picture
         })
 
         console.log("newUser:", newUser)
         const createdUser = await newUser.save()
 
-        const accessToken = await createAccessToken({ _id: createdUser._id, role: createdUser.role })
+        const tokens = await createTokens(createdUser);
 
-        passportNext(null, { accessToken })
+        passportNext(null,{
+          accessToken: tokens?.accessToken,
+          refreshToken: tokens?.refreshToken,
+        })
     }
         
     } catch (error) {

@@ -1,5 +1,5 @@
 import express from "express"
-import { registerUser, loginUser, getUsers, getMe, updateUser, updatePassword, refreshTokens } from './index'
+import { registerUser, loginUser, getUsers, getMe, updateUser, updatePassword, refreshTokens, addOrRemoveProductToFavorites } from './index'
 import { IUserRequest, JWTAuthMiddleware } from "../../lib/JWTMiddleware"
 import passport from "passport"
 
@@ -15,12 +15,16 @@ userRouter.get("/me", JWTAuthMiddleware, getMe)
 
 userRouter.put("/me", JWTAuthMiddleware, updateUser)
 
+userRouter.post("/me/favorites", JWTAuthMiddleware, addOrRemoveProductToFavorites)
+
 userRouter.get("/googleLogin", passport.authenticate("google", {scope: ["profile","email"]}))
 
 userRouter.get("/googleRedirect",passport.authenticate("google", { session: false }) ,(req: IUserRequest,res,next) => {
     try {
         const accessToken = req.user?.accessToken
-        res.redirect(`${process.env.FE_URL}/login?accessToken=${accessToken}`)
+        const refreshToken = req.user?.refreshToken
+        
+        res.redirect(`${process.env.FE_URL}/login?accessToken=${accessToken}&refreshToken=${refreshToken}`)
     } catch (error) {
         next(error)
     }
