@@ -25,6 +25,12 @@ export interface Tokens {
     refreshToken: string
 }
 
+export interface Category {
+    _id: mongoose.Types.ObjectId,
+    name:string,
+    subCategories:Array<mongoose.Types.ObjectId>
+}
+
 export interface subCategory {
     subCategories:Array<mongoose.Types.ObjectId>
     name:string
