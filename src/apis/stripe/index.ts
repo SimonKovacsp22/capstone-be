@@ -25,8 +25,8 @@ export const createSession: RequestHandler =  async (req, res, next) => {
       },
       line_items: transformedItems,
       mode: 'payment',
-      success_url: `${process.env.DOMAIN}?success=true`,
-      cancel_url: `${process.env.DOMAIN}?canceled=true`,
+      success_url: `${process.env.DOMAIN}/success`,
+      cancel_url: `${process.env.DOMAIN}/canceled`,
       metadata: {
         email,
         images: JSON.stringify(items.map((item:any) => item.productId.image_path))
