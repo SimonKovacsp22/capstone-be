@@ -15,17 +15,52 @@ import productRouter from "./apis/products/routes";
 import pinRouter from "./apis/pin/routes";
 import cartRouter from "./apis/cart/routes"
 import stripeRouter from "./apis/stripe/routes"
+import { webhooks } from "./apis/stripe";
+import createHttpError from "http-errors";
+import messageRouter from "./apis/message/routes";
+import chatRouter from "./apis/chat/routes";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { newConnectionHandler } from "./socket/socket";
 
 
 
 const port = process.env.PORT
 
 const server = express()
+const httpServer = createServer(server);
 
 
+server.use(
+  cors({
+    origin: (origin, corsNext) => {
+      console.log("ORIGIN:", origin);
+
+      if (!origin || whitelist.indexOf(origin) !== -1) {
+        corsNext(null, true);
+      } else {
+        corsNext(
+          createHttpError(
+            400,
+            "Cors Error! Your origin " + origin + "is not in the list"
+          )
+        );
+      }
+    },
+  })
+);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:3000",
+  }
+});
+
+io.on("connection", newConnectionHandler)
 
 
-server.use(cors())
+const whitelist = [ process.env.DOMAIN]
+
 server.use(express.json())
 
 server.use(passport.initialize())
@@ -38,6 +73,10 @@ server.use("/products", productRouter)
 server.use("/pin", pinRouter)
 server.use("/cart", cartRouter)
 server.use("/checkout", stripeRouter)
+server.use("/messages", messageRouter)
+server.use("/chats", chatRouter)
+
+server.post("/webhook", express.raw({type: 'application/json'}),webhooks )
 
 
 server.use(badRequestHandler)
@@ -50,7 +89,7 @@ mongoose.connect(process.env.MONGO_CON_URL!)
 
 mongoose.connection.on("connected", () => {
     console.log("success")
-    server.listen(port, () => {
+    httpServer.listen(port, () => {
         console.table(listEndpoints(server))
         console.log("server is listening on port:",port)
     })

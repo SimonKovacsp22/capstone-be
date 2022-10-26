@@ -13,7 +13,8 @@ const userSchema = new Schema({
     role:{ type:String, enum:["admin","employee","customer"],default:"customer" },
     pinRequest:[{type:mongoose.Types.ObjectId, ref:"Pin" }],
     favorites:[{type:mongoose.Types.ObjectId, ref:"Product"}],
-    refreshToken:{ type:String }
+    refreshToken:{ type:String },
+    orders:[{type:mongoose.Types.ObjectId, ref:'Order'}]
 },
 { timestamps: true },
 )

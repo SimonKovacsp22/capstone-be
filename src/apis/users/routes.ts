@@ -9,7 +9,7 @@ userRouter.post("/register", registerUser )
 
 userRouter.post("/login", loginUser)
 
-userRouter.get("/", JWTAuthMiddleware, getUsers)
+userRouter.get("/", getUsers)
 
 userRouter.get("/me", JWTAuthMiddleware, getMe)
 

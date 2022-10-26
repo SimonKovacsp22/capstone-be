@@ -144,6 +144,7 @@ export const getUserByEmail = async (email: String) => {
 
 export const refreshTokens: RequestHandler = async (req, res, next) => {
   try {
+    console.log(req.headers.authorization)
     const refreshToken = req.headers.authorization?.replace("Bearer ", "");
 
     if (refreshToken) {
@@ -199,7 +200,7 @@ export const addOrRemoveProductToFavorites: RequestHandler = async (
         { new: true, runValidators: true, upsert: true }
       );
 
-      res.send(modifiedFavorites);
+      res.status(200).send(modifiedFavorites);
     }
   } catch (error) {
     next(error);

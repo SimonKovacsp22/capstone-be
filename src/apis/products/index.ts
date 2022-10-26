@@ -99,18 +99,20 @@ export const addImage: RequestHandler = async (req, res, next) => {
 
       const products = await ProductModel.find()
 
+
       if(req.query.term?.length) {
         if(req.query.term?.length < 3){
 
             res.send({message:"Please input a longer search term."})
+        } else {
+            const searchedProducts = products.filter( (prod => prod.name.toLocaleLowerCase().includes((req.query.term?.toString() as string).toLocaleLowerCase())))
+            res.send(searchedProducts)
         }
      
-    const searchedProducts = products.filter( (prod => prod.name.toLocaleLowerCase().includes((req.query.term as string).toLocaleLowerCase())))
+   
 
 
-    res.send(searchedProducts)
-
-    
+   
     } else {
         res.send(products)
     }

@@ -6,7 +6,7 @@ export const badRequestHandler: ErrorRequestHandler = (err, req, res, next) => {
       res.status(400).send({ message: err.message, errorsList: err.errorsList })
     } else if( err instanceof mongoose.Error.CastError){
       console.log(err)
-      res.status(400).send({ message:"Wrong id!"})
+      res.status(400).send({ message:"Something wrong with request"})
     } else {
       next(err)
     }
