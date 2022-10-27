@@ -10,6 +10,7 @@ import { RequestHandler } from "express";
 import { IUserRequest } from "../../lib/JWTMiddleware";
 import UserModel from "./model";
 import ProductModel from "../products/model";
+import ChatModel from "../chat/model";
 import { findPinInDB, checkIfPinExpired } from "../pin/index";
 import bcrypt from "bcrypt";
 
@@ -18,6 +19,20 @@ export const registerUser: RequestHandler = async (req, res, next) => {
     const user = new UserModel(req.body);
 
     const { _id } = await user.save();
+
+    const admin = await UserModel.findOne({role:'admin'})
+
+    if(admin?._id) {
+      const  chat  = new ChatModel({members:[ _id,  admin._id] })
+      await chat.save()
+    } else {
+      const  chat  = new ChatModel({members:[ _id, "633e9e3b53156da398451d62"]})
+      await chat.save()
+    }
+
+    
+
+    
 
     res.status(201).send({ _id });
   } catch (error) {

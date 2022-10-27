@@ -1,4 +1,5 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy
+import ChatModel from '../apis/chat/model'
 import UserModel from '../apis/users/model'
 import { createAccessToken, createTokens } from './tokens'
 
@@ -31,8 +32,17 @@ const googleStrategy = new GoogleStrategy({
             image_path: picture
         })
 
-        console.log("newUser:", newUser)
+        
         const createdUser = await newUser.save()
+
+        const admin = await UserModel.findOne({role:'admin'})
+        if(admin?._id) {
+          const  chat  = new ChatModel({members:[ createdUser._id,  admin._id] })
+          await chat.save()
+        } else {
+          const  chat  = new ChatModel({members:[ createdUser._id, "633e9e3b53156da398451d62"]})
+          await chat.save()
+        }
 
         const tokens = await createTokens(createdUser);
 
