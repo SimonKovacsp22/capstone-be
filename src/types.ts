@@ -18,6 +18,7 @@ export interface User {
     accessToken: string,
     role: "admin" | "employee" | "customer",
     refreshToken: string,
+    orders:mongoose.Types.ObjectId[]
 }
 
 export interface Tokens {

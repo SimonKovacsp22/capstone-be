@@ -26,7 +26,7 @@ export const createAccessToken = (
     jwt.sign(
       payload,
       process.env.JWT_SECRET!,
-      { expiresIn: "3600s" },
+      { expiresIn: "10s" },
       (err, token) => {
         if (err) {
           reject(err);

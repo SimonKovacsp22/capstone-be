@@ -7,7 +7,7 @@ let activeUsers :{userId:String, socketId:string} [] = [];
 export const newConnectionHandler = (socket:any) => {
 
     socket.on("new-user-add", (newUserId:String) => {
-        console.log(newUserId)
+        
       if(newUserId !== null){ 
         if(activeUsers.length > 0 ){
            if (!activeUsers.some((user) => user.userId === newUserId)) {
@@ -28,7 +28,7 @@ export const newConnectionHandler = (socket:any) => {
         const {receiverId,message } = data;
 
         const user = activeUsers.find( user => user.userId === receiverId)
-        console.log(user)
+        
 
         if(user) {
           socket.to(user.socketId).emit("receive-message", data )

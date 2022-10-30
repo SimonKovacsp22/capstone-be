@@ -34,8 +34,6 @@ const httpServer = createServer(server);
 server.use(
   cors({
     origin: (origin, corsNext) => {
-      console.log("ORIGIN:", origin);
-
       if (!origin || whitelist.indexOf(origin) !== -1) {
         corsNext(null, true);
       } else {
@@ -76,7 +74,7 @@ server.use("/checkout", stripeRouter)
 server.use("/messages", messageRouter)
 server.use("/chats", chatRouter)
 
-server.post("/webhook", express.raw({type: 'application/json'}),webhooks )
+server.post("/webhook",  webhooks )
 
 
 server.use(badRequestHandler)

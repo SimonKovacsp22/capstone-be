@@ -9,7 +9,6 @@ const googleStrategy = new GoogleStrategy({
     callbackURL:process.env.GOOGLE_REDIRECT_URL
 
 },async (_accessToken :any, _refreshTokeh: any, profile: any, passportNext: (arg: null, arg1: any) => void )=>{
-     console.log("PROFILE:", profile)
     try {
 
     const user =await UserModel.findOne({email: profile._json.email})
