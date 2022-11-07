@@ -74,7 +74,7 @@ export const getUsers: RequestHandler = async (req, res, next) => {
 
 export const getMe: RequestHandler = async (req: IUserRequest, res, next) => {
   try {
-    const user = await UserModel.findById(req.user?._id);
+    const user = await UserModel.findById(req.user?._id).populate({path:'favorites'});
 
     if (!user) {
       next(

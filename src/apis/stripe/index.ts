@@ -51,7 +51,7 @@ export const createSession: RequestHandler =  async (req, res, next) => {
          const user = await UserModel.findOne({email: session.metadata.email})
         
          if(user){
-          const order = new OrderModel({user ,amount: session.amount_total / 100, products: JSON.parse(session.metadata.products)})
+          const order = new OrderModel({user ,amount: session.amount_total / 100, products: JSON.parse(session.metadata.products),guest: session.customer_details.email})
           const {_id} = await order.save()
           user?.orders.push(_id)
           await  user?.save()

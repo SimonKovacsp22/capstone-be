@@ -1,47 +1,42 @@
 import mongoose from "mongoose";
-import ChatModel from "../apis/chat/model"
-import MessageModel from "../apis/message/model"
+import ChatModel from "../apis/chat/model";
+import MessageModel from "../apis/message/model";
 
-let activeUsers :{userId:String, socketId:string} [] = [];
+let activeUsers: { userId: String; socketId: string }[] = [];
 
-export const newConnectionHandler = (socket:any) => {
-
-    socket.on("new-user-add", (newUserId:String) => {
-        
-      if(newUserId !== null){ 
-        if(activeUsers.length > 0 ){
-           if (!activeUsers.some((user) => user.userId === newUserId)) {
-          activeUsers.push({ userId: newUserId,socketId: socket.id });
-          
-        }
-      }  else {
-        activeUsers.push({ userId: newUserId,socketId: socket.id });
-          
+export const newConnectionHandler = (io: any) => {
+  io.on("connection", (socket: any) => {
+    socket.on("new-user-add", (newUserId: String) => {
+      if (!activeUsers.some((user) => user.userId === newUserId)) {
+        activeUsers.push({ userId: newUserId, socketId: socket.id });
       }
-    }
-        // send all active users to new user
-        
-        socket.emit("get-users", activeUsers);
-      });
+      io.emit("get-users", activeUsers);
+    });
 
-      socket.on("send-message", (data:{receiverId:string,message:string})=> {
-        const {receiverId,message } = data;
+    socket.on(
+      "send-message",
+      (data: {
+        receiverId: string;
+        text: string;
+        chatId: string;
+        senderId: string;
+        createdAt: Date;
+      }) => {
+        const { receiverId, text } = data;
+        console.log(data);
 
-        const user = activeUsers.find( user => user.userId === receiverId)
-        
+        const user = activeUsers.find((user) => user.userId === receiverId);
 
-        if(user) {
-          socket.to(user.socketId).emit("receive-message", data )
+        if (user) {
+          socket.to(user.socketId).emit("receive-message", data);
         }
-      })
+      }
+    );
 
-      socket.on("disconnect" ,()=> {
-        activeUsers = activeUsers.filter( user => user.socketId !== socket.id)
-       
-        socket.emit( "get-users", activeUsers)
-      })
+    socket.on("disconnect", () => {
+      activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
 
-  
-
-  
+      io.emit("get-users", activeUsers);
+    });
+  });
 };

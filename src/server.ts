@@ -22,6 +22,7 @@ import chatRouter from "./apis/chat/routes";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { newConnectionHandler } from "./socket/socket";
+import orderRouter from "./apis/orders/routes";
 
 
 
@@ -54,7 +55,7 @@ const io = new Server(httpServer, {
   }
 });
 
-io.on("connection", newConnectionHandler)
+newConnectionHandler(io)
 
 
 const whitelist = [ process.env.DOMAIN]
@@ -73,6 +74,7 @@ server.use("/cart", cartRouter)
 server.use("/checkout", stripeRouter)
 server.use("/messages", messageRouter)
 server.use("/chats", chatRouter)
+server.use("/orders", orderRouter)
 
 server.post("/webhook",  webhooks )
 

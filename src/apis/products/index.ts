@@ -108,22 +108,27 @@ export const addImage: RequestHandler = async (req, res, next) => {
             const searchedProducts = products.filter( (prod => prod.name.toLocaleLowerCase().includes((req.query.term?.toString() as string).toLocaleLowerCase())))
             res.send(searchedProducts)
         }
-     
-   
-
-
    
     } else {
         res.send(products)
     }
-
-
-      
-
-      
-  
     
     } catch (error) {
       next(error)
     }
   };
+
+  
+  export const getTopProducts: RequestHandler = async (req,res,next) => {
+    try {
+        
+       
+        const products = await ProductModel.find({code:{
+            $in:['3300701','7736615989','B2LB129']
+        }})
+        res.send(products)
+        
+    } catch (error) {
+        next(error)
+    }
+}

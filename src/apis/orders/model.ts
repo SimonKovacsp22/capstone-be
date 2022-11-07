@@ -1,7 +1,7 @@
 import mongoose, {model,Schema,Types} from 'mongoose'
 
 const orderSchema = new Schema({
-    user:{type:mongoose.Types.ObjectId},
+    user:{type:mongoose.Types.ObjectId, ref:'User'},
     status: { type: String, enum: ["Resolved", "Unresolved"],default:"Unresolved" },
     products:[{type:mongoose.Types.ObjectId, ref:'Product'}],
     amount:{type:String},

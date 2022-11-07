@@ -17,7 +17,7 @@ export const getChatsForUser:RequestHandler = async (req, res) => {
   try {
     const chat = await ChatModel.find({
       members: { $in: [req.params.userId] },
-    });
+    }).populate({path:'members'});
     res.status(200).json(chat);
   } catch (error) {
     res.status(500).json(error);
@@ -28,7 +28,7 @@ export const getChatWithParticipants:RequestHandler = async (req, res) => {
   try {
     const chat = await ChatModel.findOne({
       members: { $all: [req.params.firstId, req.params.secondId] },
-    });
+    }).populate({path:'members'})
     res.status(200).json(chat)
   } catch (error) {
     res.status(500).json(error)
