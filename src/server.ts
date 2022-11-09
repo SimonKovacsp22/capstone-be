@@ -58,7 +58,7 @@ const io = new Server(httpServer, {
 newConnectionHandler(io)
 
 
-const whitelist = [ process.env.DOMAIN]
+const whitelist = [ process.env.DOMAIN, 'http://localhost:3000']
 
 server.use(express.json())
 
