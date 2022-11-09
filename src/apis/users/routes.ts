@@ -24,7 +24,7 @@ userRouter.get("/googleRedirect",passport.authenticate("google", { session: fals
         const accessToken = req.user?.accessToken
         const refreshToken = req.user?.refreshToken
         
-        res.redirect(`${process.env.FE_URL}/login?accessToken=${accessToken}&refreshToken=${refreshToken}`)
+        res.redirect(`${process.env.DOMAIN}/login?accessToken=${accessToken}&refreshToken=${refreshToken}`)
     } catch (error) {
         next(error)
     }
