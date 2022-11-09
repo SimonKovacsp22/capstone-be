@@ -108,42 +108,7 @@ export const getAllOrders:RequestHandler = async (req,res,next) => {
  }
  }
 
- export const getOrdersByDateRange:RequestHandler = async (req,res,next) => {
-    try{
-    const {startDate,endDate} = req.query
-    console.log(req.query.startDate)
 
-    if(startDate && endDate){
-        const startDateFormated = startDate.toString()?.concat('T00:00:00.000Z')
-        
-        const endDateFormated = endDate.toString()?.concat('T23:59:59.999Z')
-    
-     const orders = await OrderModel.find({createdAt:{$gte:startDateFormated , $lte: endDateFormated}}).sort({createdAt:-1})
-     if(orders) {
-         res.send(orders)
-     }  }
-    
-    
- }catch(error) {
-     next(createHttpError(404))
- }
- }
-
- export const getOrdersByEmail:RequestHandler = async (req,res,next) => {
-    
-    try{
-        const {email} = req.query
-     const orders = await OrderModel.find({guest:email}).sort({createdAt:-1}).populate({path:'user'}).populate('products')
-     if(orders) {
-         res.send(orders)
-     } else {
-
-        next(createHttpError(404))
-     }
- }catch(error) {
-     next(createHttpError(404))
- }
- }
 
  export const getOrdersById: RequestHandler = async (req,res,next) => {
     
