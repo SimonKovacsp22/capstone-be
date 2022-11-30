@@ -7,10 +7,10 @@ const orderRouter = express.Router()
 
 orderRouter.get("/me", JWTAuthMiddleware, getOrdersForUser)
 
-orderRouter.get('/', JWTAuthMiddleware, adminMiddleware, getAllOrders)
+orderRouter.get('/',  getAllOrders)
 
-orderRouter.get('/user/:id', JWTAuthMiddleware, adminMiddleware, getOrdersById)
+orderRouter.get('/user/:id',  getOrdersById)
 
-orderRouter.patch('/:id', JWTAuthMiddleware, adminMiddleware, updateOrderStatus)
+orderRouter.patch('/:id',  updateOrderStatus)
 
 export default orderRouter;
