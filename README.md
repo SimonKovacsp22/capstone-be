@@ -6,7 +6,7 @@ https://kotol-be.herokuapp.com
 
 
 
-###:link:**/users/register**
+###**/users/register** 
 register user
 
 :large_orange_diamond: POST
@@ -20,7 +20,7 @@ register user
 
             }
 
-###:link:**/users/login**
+###**/users/login** :link:
 login user
 
 :large_orange_diamond: POST
@@ -35,7 +35,7 @@ login user
             "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9_lH0lvi",
             "refreshToken": "3MTgxNDA0MX0.K9JSkL_1pbJeNvvOFyxEed-gacw6d"
         }
-###:link:**/users/googleLogin**
+###**/users/googleLogin** :link:
 login user
 
 :white_check_mark: GET
@@ -44,7 +44,7 @@ login user
             "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9_lH0lvi",
             "refreshToken": "3MTgxNDA0MX0.K9JSkL_1pbJeNvvOFyxEed-gacw6d"
         }
-###:link:**/users**
+###**/users** :link:
 list of all users
 
 :white_check_mark: GET :heavy_exclamation_mark: |  Admin JWT required
@@ -59,7 +59,7 @@ list of all users
             
             }
 
-###:link:**/users/me**
+###**/users/me** :link:
 info for single account
 
 :white_check_mark: GET :heavy_exclamation_mark: | JWT required
@@ -75,7 +75,7 @@ info for single account
             "orders":[]
             
             }
-###:link:**/pin/reset-password**
+###**/pin/reset-password** :link:
 request reset password pin
 
 :large_orange_diamond: POST
@@ -88,7 +88,7 @@ request reset password pin
         as a response a pin will be sent to example.@mail.com
         
 
-###:link:**/users/password-reset**
+###**/users/password-reset** :link:
 reset password
 
 :black_medium_square: PATCH 
@@ -100,7 +100,7 @@ reset password
 
             }
 
-###:link:**/users/refresh-tokens**
+###**/users/refresh-tokens** :link:
 reset password
 
 :large_orange_diamond: POST 
